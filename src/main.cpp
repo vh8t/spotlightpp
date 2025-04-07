@@ -105,7 +105,7 @@ int main() {
 
   std::string buffer;
   double result = NAN;
-  double ans = NAN;
+  double ans = 0.0f;
   bool change = false;
   bool show_eq = true;
   int elements = 0;
