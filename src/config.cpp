@@ -9,6 +9,29 @@
 
 namespace fs = std::filesystem;
 
+Position str_to_pos(const std::string &str) {
+  if (str == "top left") {
+    return Position::TOP_LEFT;
+  } else if (str == "top center") {
+    return Position::TOP_CENTER;
+  } else if (str == "top right") {
+    return Position::TOP_RIGHT;
+  } else if (str == "left") {
+    return Position::LEFT;
+  } else if (str == "center") {
+    return Position::CENTER;
+  } else if (str == "right") {
+    return Position::RIGHT;
+  } else if (str == "bottom left") {
+    return Position::BOTTOM_LEFT;
+  } else if (str == "bottom center") {
+    return Position::BOTTOM_CENTER;
+  } else if (str == "bottom right") {
+    return Position::BOTTOM_RIGHT;
+  }
+  return Position::CENTER;
+}
+
 Config load_config() {
   fs::path config_path;
 
@@ -35,6 +58,11 @@ Config load_config() {
 
     config.window_title = data["window"]["title"].value_or("spotlight++");
     config.target_fps = data["window"]["fps"].value_or(120);
+    config.x_padding = data["window"]["pad-x"].value_or(50);
+    config.y_paddding = data["window"]["pad-y"].value_or(50);
+
+    std::string position = data["window"]["position"].value_or("center");
+    config.position = str_to_pos(position);
 
     config.bg1 = GetColor(data["theme"]["bg1"].value_or(ColorToInt(BG_GRAY)));
     config.bg2 = GetColor(data["theme"]["bg2"].value_or(ColorToInt(DARKGRAY)));

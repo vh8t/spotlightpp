@@ -97,10 +97,48 @@ int main() {
   int width = GetMonitorWidth(0);
   int height = GetMonitorHeight(0);
 
-  int posX = (width - config.prompt_width) / 2;
-  int posY = height / 2.5;
-
   int frame_counter = 0;
+  int posX = 0;
+  int posY = 0;
+
+  switch (config.position) {
+  case Position::TOP_LEFT: {
+    posX = config.x_padding;
+    posY = config.y_paddding;
+  } break;
+  case Position::TOP_CENTER: {
+    posX = (width - config.prompt_width) / 2;
+    posY = config.y_paddding;
+  } break;
+  case Position::TOP_RIGHT: {
+    posX = width - config.prompt_width - config.x_padding;
+    posY = config.y_paddding;
+  } break;
+  case Position::LEFT: {
+    posX = config.x_padding;
+    posY = height / 2.5;
+  } break;
+  case Position::CENTER: {
+    posX = (width - config.prompt_width) / 2;
+    posY = height / 2.5;
+  } break;
+  case Position::RIGHT: {
+    posX = width - config.prompt_width - config.x_padding;
+    posY = height / 2.5;
+  } break;
+  case Position::BOTTOM_LEFT: {
+    posX = config.x_padding;
+    posY = height - config.prompt_height - config.y_paddding;
+  } break;
+  case Position::BOTTOM_CENTER: {
+    posX = (width - config.prompt_width) / 2;
+    posY = height - config.prompt_height - config.y_paddding;
+  } break;
+  case Position::BOTTOM_RIGHT: {
+    posX = width - config.prompt_width - config.x_padding;
+    posY = height - config.prompt_height - config.y_paddding;
+  } break;
+  }
 
   SetWindowPosition(posX, posY);
   SetTargetFPS(config.target_fps);
@@ -193,11 +231,21 @@ int main() {
 
     ClearBackground(config.bg1);
 
+    int prompt_y = 12;
+    if (config.position == Position::BOTTOM_LEFT ||
+        config.position == Position::BOTTOM_CENTER ||
+        config.position == Position::BOTTOM_RIGHT) {
+      prompt_y = 10 + elements * (config.font_size + 10);
+      if (filtered.size() > 0)
+        prompt_y += 10;
+    }
+
     if (buffer.empty()) {
-      DrawText("Type to search...", PADDING_LEFT, 12, config.font_size,
+      DrawText("Type to search...", PADDING_LEFT, prompt_y, config.font_size,
                config.fg3);
     } else {
-      DrawText(buffer.c_str(), PADDING_LEFT, 12, config.font_size, config.fg1);
+      DrawText(buffer.c_str(), PADDING_LEFT, prompt_y, config.font_size,
+               config.fg1);
     }
 
     if (frame_counter / (config.target_fps / 2) % 2 == 0 && !buffer.empty())
@@ -219,27 +267,43 @@ int main() {
         }
       }
 
-      if (elements > 0)
-        SetWindowSize(config.prompt_width,
-                      config.prompt_height + 10 +
-                          elements * (config.font_size + 10));
-      else
+      int height = config.prompt_height;
+      if (elements > 0) {
+        height = config.prompt_height + 10 + elements * (config.font_size + 10);
+        SetWindowSize(config.prompt_width, height);
+      } else {
         SetWindowSize(config.prompt_width, config.prompt_height);
+      }
+
+      if (config.position == Position::BOTTOM_LEFT ||
+          config.position == Position::BOTTOM_CENTER ||
+          config.position == Position::BOTTOM_RIGHT) {
+        SetWindowPosition(posX, posY - height + config.prompt_height);
+      }
 
       selected = 0;
       offset = 0;
     }
 
     for (int i = 0; i < elements; i++) {
+      int y_offset = 40;
+      if (config.position == Position::BOTTOM_LEFT ||
+          config.position == Position::BOTTOM_CENTER ||
+          config.position == Position::BOTTOM_RIGHT) {
+        y_offset = 0;
+      }
+
       if (i == selected) {
         Rectangle rec = {
-            6.0f, static_cast<float>(52 + (config.font_size + 10) * i - 4),
+            6.0f,
+            static_cast<float>(12 + y_offset + (config.font_size + 10) * i - 4),
             static_cast<float>(config.prompt_width - 12),
             config.font_size + 6.0f};
         DrawRectangleRounded(rec, 0.5f, 0.0f, config.bg2);
       }
       DrawText(filtered[i + offset].app_name.c_str(), 14,
-               52 + (config.font_size + 10) * i, config.font_size, config.fg2);
+               12 + y_offset + (config.font_size + 10) * i, config.font_size,
+               config.fg2);
     }
 
     if (!std::isnan(result)) {

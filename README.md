@@ -62,7 +62,10 @@ max-elements = 7
 
 [window]
 title = "spotlight++"
-fps = 120
+fps = 60
+position = "bottom center" # '<top center bottom> <left center right>' use 'center' for 'center center'
+pad-x = 50 # x axis padding
+pad-y = 50 # y axis padding
 
 [theme]
 bg1 = 0x1e1e1eff  # RGBA
