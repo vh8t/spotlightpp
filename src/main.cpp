@@ -9,6 +9,8 @@
 #include <raylib.h>
 #include <sys/wait.h>
 
+#define PADDING_LEFT 14
+
 bool running = true;
 Config config;
 
@@ -192,14 +194,16 @@ int main() {
     ClearBackground(config.bg1);
 
     if (buffer.empty()) {
-      DrawText("Type to search...", 10, 12, config.font_size, config.fg3);
+      DrawText("Type to search...", PADDING_LEFT, 12, config.font_size,
+               config.fg3);
     } else {
-      DrawText(buffer.c_str(), 10, 12, config.font_size, config.fg1);
+      DrawText(buffer.c_str(), PADDING_LEFT, 12, config.font_size, config.fg1);
     }
 
     if (frame_counter / (config.target_fps / 2) % 2 == 0 && !buffer.empty())
-      DrawText("|", 13 + MeasureText(buffer.c_str(), config.font_size), 12,
-               config.font_size, config.fg2);
+      DrawText("|",
+               PADDING_LEFT + 3 + MeasureText(buffer.c_str(), config.font_size),
+               12, config.font_size, config.fg2);
 
     if (change) {
       if (buffer.empty()) {
@@ -250,7 +254,7 @@ int main() {
       if (show_eq)
         res = "= " + res;
 
-      int x = 29 + MeasureText(buffer.c_str(), config.font_size);
+      int x = PADDING_LEFT + 20 + MeasureText(buffer.c_str(), config.font_size);
       Rectangle rec = {
           static_cast<float>(x - 9), 8.0f,
           static_cast<float>(MeasureText(res.c_str(), config.font_size) + 18),
