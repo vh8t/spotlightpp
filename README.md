@@ -52,8 +52,8 @@ Edit `~/.config/spotlightpp/config.toml` to customize behavior:
 ```toml
 builtins = true
 
-[font]              # font folder is in ~/.config/spotlightpp/fonts
-name "Lato-Regular" # empty for default raylib font, use file name from fonts folder withou .ttf
+[font]              # font must be in ~/.config/spotlightpp/fonts
+name "Lato-Regular" # empty for default raylib font, use file name from fonts folder without .ttf
 size = 20
 
 [prompt]
@@ -66,9 +66,9 @@ precision = 6     # decimal points
 [window]
 title = "spotlight++"
 fps = 60
-position = "bottom center"  # '<top center bottom> <left center right>' use 'center' for 'center center'
-pad-x = 50  # x axis padding
-pad-y = 50  # y axis padding
+position = "bottom center"  # top left, top, top right, left, center, right, bottom left, bottom, bottom right
+pad-x = 50                  # x axis padding
+pad-y = 50                  # y axis padding
 
 [theme]
 # RGBA
@@ -76,7 +76,7 @@ bg1 = 0x1e1e1eff  # background
 bg2 = 0x505050ff  # background highlight
 fg1 = 0xffffffff  # primary text
 fg2 = 0xc8c8c8ff  # secondary text
-fg3 = 0x505050ff  # hints
+fg3 = 0x505050ff  # hint text
 ```
 
 ## Known Issues
