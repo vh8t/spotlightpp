@@ -1,5 +1,3 @@
-#include <iomanip>
-#include <sstream>
 #define TE_POW_FROM_RIGHT
 
 #include "apps.hpp"
@@ -7,14 +5,39 @@
 #include "tinyexpr.h"
 #include "utils.hpp"
 
+#include <filesystem>
 #include <httplib.h>
+#include <iomanip>
 #include <raylib.h>
+#include <sstream>
 #include <sys/wait.h>
 
 #define PADDING_LEFT 14
 
+namespace fs = std::filesystem;
+
 bool running = true;
 Config config;
+Font custom_font;
+
+void DrawTextB(const char *text, int posX, int posY, int fontSize,
+               Color color) {
+  if (config.font_name.empty()) {
+    DrawText(text, posX, posY, fontSize, color);
+  } else {
+    DrawTextEx(custom_font, text,
+               {static_cast<float>(posX), static_cast<float>(posY)}, fontSize,
+               0, color);
+  }
+}
+
+int MeasureTextB(const char *text, int fontSize) {
+  if (config.font_name.empty()) {
+    return MeasureText(text, fontSize);
+  } else {
+    return MeasureTextEx(custom_font, text, fontSize, 0).x;
+  }
+}
 
 void app_open(const std::string &name, const std::vector<std::string> &args) {
   pid_t pid = fork();
@@ -145,6 +168,18 @@ int main() {
   SetWindowPosition(posX, posY);
   SetTargetFPS(config.target_fps);
 
+  if (!config.font_name.empty()) {
+    fs::path font_path =
+        fs::path(get_base_dir()) / "assets" / (config.font_name + ".ttf");
+
+    if (fs::exists(font_path)) {
+      custom_font = LoadFontEx(font_path.c_str(), config.font_size, nullptr, 0);
+    } else {
+      std::cerr << "Failed to load font from: " << font_path << std::endl;
+      config.font_name = "";
+    }
+  }
+
   std::string buffer;
   double result = NAN;
   double ans = 0.0f;
@@ -165,7 +200,6 @@ int main() {
       }
 
       key = GetCharPressed();
-      std::cout << "here" << std::endl;
     }
 
     if (IsKeyDown(KEY_BACKSPACE) && !buffer.empty()) {
@@ -241,17 +275,17 @@ int main() {
     }
 
     if (buffer.empty()) {
-      DrawText("Type to search...", PADDING_LEFT, prompt_y, config.font_size,
-               config.fg3);
+      DrawTextB("Type to search...", PADDING_LEFT, prompt_y, config.font_size,
+                config.fg3);
     } else {
-      DrawText(buffer.c_str(), PADDING_LEFT, prompt_y, config.font_size,
-               config.fg1);
+      DrawTextB(buffer.c_str(), PADDING_LEFT, prompt_y, config.font_size,
+                config.fg1);
     }
 
     if (frame_counter / (config.target_fps / 2) % 2 == 0 && !buffer.empty())
-      DrawText("|",
-               PADDING_LEFT + 3 + MeasureText(buffer.c_str(), config.font_size),
-               prompt_y, config.font_size, config.fg2);
+      DrawTextB("|",
+                PADDING_LEFT + MeasureTextB(buffer.c_str(), config.font_size),
+                prompt_y, config.font_size, config.fg2);
 
     if (change) {
       if (buffer.empty()) {
@@ -297,9 +331,9 @@ int main() {
             config.font_size + 6.0f};
         DrawRectangleRounded(rec, 0.5f, 0.0f, config.bg2);
       }
-      DrawText(filtered[i + offset].app_name.c_str(), 14,
-               12 + y_offset + (config.font_size + 10) * i, config.font_size,
-               config.fg2);
+      DrawTextB(filtered[i + offset].app_name.c_str(), 14,
+                12 + y_offset + (config.font_size + 10) * i, config.font_size,
+                config.fg2);
     }
 
     if (!std::isnan(result)) {
@@ -316,14 +350,15 @@ int main() {
       if (show_eq)
         res = "= " + res;
 
-      int x = PADDING_LEFT + 20 + MeasureText(buffer.c_str(), config.font_size);
+      int x =
+          PADDING_LEFT + 20 + MeasureTextB(buffer.c_str(), config.font_size);
       Rectangle rec = {
           static_cast<float>(x - 9), static_cast<float>(prompt_y - 4),
-          static_cast<float>(MeasureText(res.c_str(), config.font_size) + 18),
+          static_cast<float>(MeasureTextB(res.c_str(), config.font_size) + 18),
           config.font_size + 6.0f};
 
       DrawRectangleRounded(rec, 0.5f, 0.0f, config.bg2);
-      DrawText(res.c_str(), x, prompt_y, config.font_size, config.fg2);
+      DrawTextB(res.c_str(), x, prompt_y, config.font_size, config.fg2);
     }
 
     if (change) {

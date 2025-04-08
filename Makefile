@@ -30,6 +30,6 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
 install: all
-	sudo cp $(BUILD_DIR)/$(EXE) /usr/bin/spotlightpp
+	sudo ln -sf $(abspath $(BUILD_DIR)/$(EXE)) /usr/bin/spotlightpp
 
 .PHONY: all clean

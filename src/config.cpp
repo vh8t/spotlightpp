@@ -51,6 +51,7 @@ Config load_config() {
     Config config;
 
     config.font_size = data["font"]["size"].value_or(20);
+    config.font_name = data["font"]["name"].value_or("");
 
     config.prompt_height = data["prompt"]["height"].value_or(40);
     config.prompt_width = data["prompt"]["width"].value_or(700);

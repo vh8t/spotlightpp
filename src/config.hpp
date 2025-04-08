@@ -21,6 +21,7 @@ enum class Position {
 
 struct Config {
   int font_size = 20;
+  std::string font_name = "";
 
   int prompt_height = 40;
   int prompt_width = 700;
