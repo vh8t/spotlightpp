@@ -55,6 +55,17 @@ Config load_config() {
     config.prompt_height = data["prompt"]["height"].value_or(40);
     config.prompt_width = data["prompt"]["width"].value_or(700);
     config.prompt_max_elements = data["prompt"]["max-elements"].value_or(7);
+    config.prompt_precision = data["prompt"]["precision"].value_or(6);
+
+    std::string prompt_position = data["prompt"]["position"].value_or("top");
+    if (prompt_position == "bottom") {
+      config.prompt_position = Position::BOTTOM_CENTER;
+    } else {
+      config.prompt_position = Position::TOP_CENTER;
+    }
+
+    config.prompt_precision =
+        std::max(std::min(config.prompt_precision, 15), 0) + 1;
 
     config.window_title = data["window"]["title"].value_or("spotlight++");
     config.target_fps = data["window"]["fps"].value_or(120);

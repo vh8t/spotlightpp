@@ -25,6 +25,8 @@ struct Config {
   int prompt_height = 40;
   int prompt_width = 700;
   int prompt_max_elements = 7;
+  Position prompt_position = Position::TOP_CENTER;
+  int prompt_precision = 6;
 
   std::string window_title = "spotlight++";
   int target_fps = 120;

@@ -58,21 +58,24 @@ size = 20
 [prompt]
 height = 40
 width = 700
-max-elements = 7
+max-elements = 7  # search results
+position = "top"  # top/bottom
+precision = 6     # decimal points
 
 [window]
 title = "spotlight++"
 fps = 60
-position = "bottom center" # '<top center bottom> <left center right>' use 'center' for 'center center'
-pad-x = 50 # x axis padding
-pad-y = 50 # y axis padding
+position = "bottom center"  # '<top center bottom> <left center right>' use 'center' for 'center center'
+pad-x = 50  # x axis padding
+pad-y = 50  # y axis padding
 
 [theme]
-bg1 = 0x1e1e1eff  # RGBA
-bg2 = 0x505050ff
-fg1 = 0xffffffff
-fg2 = 0xc8c8c8ff
-fg3 = 0x505050ff
+# RGBA
+bg1 = 0x1e1e1eff  # background
+bg2 = 0x505050ff  # background highlight
+fg1 = 0xffffffff  # primary text
+fg2 = 0xc8c8c8ff  # secondary text
+fg3 = 0x505050ff  # hints
 ```
 
 ## Known Issues

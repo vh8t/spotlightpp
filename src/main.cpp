@@ -1,3 +1,5 @@
+#include <iomanip>
+#include <sstream>
 #define TE_POW_FROM_RIGHT
 
 #include "apps.hpp"
@@ -232,9 +234,7 @@ int main() {
     ClearBackground(config.bg1);
 
     int prompt_y = 12;
-    if (config.position == Position::BOTTOM_LEFT ||
-        config.position == Position::BOTTOM_CENTER ||
-        config.position == Position::BOTTOM_RIGHT) {
+    if (config.prompt_position == Position::BOTTOM_CENTER) {
       prompt_y = 10 + elements * (config.font_size + 10);
       if (filtered.size() > 0)
         prompt_y += 10;
@@ -275,9 +275,7 @@ int main() {
         SetWindowSize(config.prompt_width, config.prompt_height);
       }
 
-      if (config.position == Position::BOTTOM_LEFT ||
-          config.position == Position::BOTTOM_CENTER ||
-          config.position == Position::BOTTOM_RIGHT) {
+      if (config.prompt_position == Position::BOTTOM_CENTER) {
         SetWindowPosition(posX, posY - height + config.prompt_height);
       }
 
@@ -287,9 +285,7 @@ int main() {
 
     for (int i = 0; i < elements; i++) {
       int y_offset = 40;
-      if (config.position == Position::BOTTOM_LEFT ||
-          config.position == Position::BOTTOM_CENTER ||
-          config.position == Position::BOTTOM_RIGHT) {
+      if (config.prompt_position == Position::BOTTOM_CENTER) {
         y_offset = 0;
       }
 
@@ -307,7 +303,9 @@ int main() {
     }
 
     if (!std::isnan(result)) {
-      std::string res = std::to_string(result);
+      std::ostringstream oss;
+      oss << std::setprecision(config.prompt_precision) << result;
+      std::string res = oss.str();
       if (res.find('.') != std::string::npos) {
         res.erase(res.find_last_not_of('0') + 1, std::string::npos);
         if (res.back() == '.') {
