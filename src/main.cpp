@@ -82,20 +82,14 @@ void run_builtin(const std::string &builtin, const std::string &buffer) {
   }
 }
 
-bool rate_limit_backspace(bool reset = false) {
-  static int rate_counter = 0;
-
-  if (reset) {
-    rate_counter = 0;
-  } else {
-    rate_counter++;
-    if (rate_counter > (config.target_fps / 4)) {
-      if (rate_counter % (config.target_fps / 16) == 0) {
-        return true;
-      }
-    } else if (rate_counter == 1) {
+bool rate_limit_key(int &counter) {
+  counter++;
+  if (counter > (config.target_fps / 4)) {
+    if (counter % (config.target_fps / 16) == 0) {
       return true;
     }
+  } else if (counter == 1) {
+    return true;
   }
 
   return false;
@@ -202,28 +196,68 @@ int main(int argc, const char **argv) {
   int selected = 0;
   int offset = 0;
 
+  size_t index = 0;
+
+  int backspace_counter = 0;
+  int right_counter = 0;
+  int left_counter = 0;
+
   te_variable vars[] = {{"ans", &ans}};
 
   while (!WindowShouldClose() && running) {
     int key = GetCharPressed();
     while (key > 0) {
       if (key >= 32 && key <= 125) {
-        buffer.push_back(key);
+        if (index == buffer.size()) {
+          buffer.push_back(key);
+        } else {
+          buffer.insert(index, 1, key);
+        }
         change = true;
+        index++;
       }
 
       key = GetCharPressed();
     }
 
-    if (IsKeyDown(KEY_BACKSPACE) && !buffer.empty()) {
-      if (rate_limit_backspace()) {
-        buffer.pop_back();
+    if (IsKeyDown(KEY_BACKSPACE) && !buffer.empty() && index != 0) {
+      if (rate_limit_key(backspace_counter)) {
+        if (index == buffer.size()) {
+          buffer.pop_back();
+        } else {
+          buffer.erase(index - 1, 1);
+        }
         change = true;
+        index--;
       }
     }
 
     if (IsKeyReleased(KEY_BACKSPACE)) {
-      rate_limit_backspace(true);
+      backspace_counter = 0;
+    }
+
+    if (IsKeyDown(KEY_LEFT)) {
+      if (rate_limit_key(left_counter)) {
+        if (index > 0) {
+          index--;
+        }
+      }
+    }
+
+    if (IsKeyReleased(KEY_LEFT)) {
+      left_counter = 0;
+    }
+
+    if (IsKeyDown(KEY_RIGHT)) {
+      if (rate_limit_key(right_counter)) {
+        if (index < buffer.size()) {
+          index++;
+        }
+      }
+    }
+
+    if (IsKeyReleased(KEY_RIGHT)) {
+      right_counter = 0;
     }
 
     if (IsKeyPressed(KEY_ENTER) && !buffer.empty()) {
@@ -295,10 +329,22 @@ int main(int argc, const char **argv) {
                 config.fg1);
     }
 
-    if (frame_counter / (config.target_fps / 2) % 2 == 0 && !buffer.empty())
-      DrawTextB("|",
-                PADDING_LEFT + MeasureTextB(buffer.c_str(), config.font_size),
-                prompt_y, config.font_size, config.fg2);
+    if (frame_counter / (config.target_fps / 2) % 2 == 0 && !buffer.empty()) {
+      // DrawTextB("|",
+      //           PADDING_LEFT + MeasureTextB(buffer.substr(0, index).c_str(),
+      //                                       config.font_size),
+      //           prompt_y, config.font_size, config.fg2);
+
+      int carret_x =
+          PADDING_LEFT + 1 +
+          MeasureTextB(buffer.substr(0, index).c_str(), config.font_size);
+
+      DrawLineEx(
+          {static_cast<float>(carret_x), static_cast<float>(prompt_y + 2)},
+          {static_cast<float>(carret_x),
+           static_cast<float>(prompt_y + config.font_size - 2)},
+          1, config.fg2);
+    }
 
     if (change) {
       if (buffer.empty()) {
