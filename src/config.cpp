@@ -33,14 +33,13 @@ Position str_to_pos(const std::string &str) {
 }
 
 Config load_config() {
-  fs::path config_path;
-
   const char *home = std::getenv("HOME");
-  if (home) {
-    config_path = fs::path(home) / ".config" / "spotlightpp" / "config.toml";
-  } else {
-    config_path = fs::path(get_base_dir()) / "config.toml";
+  if (!home) {
+    return Config();
   }
+
+  fs::path config_path =
+      fs::path(home) / ".config" / "spotlightpp" / "config.toml";
 
   if (!fs::exists(config_path)) {
     return Config();

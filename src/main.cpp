@@ -1,3 +1,4 @@
+#include <cstdlib>
 #define TE_POW_FROM_RIGHT
 
 #include "apps.hpp"
@@ -169,14 +170,21 @@ int main() {
   SetTargetFPS(config.target_fps);
 
   if (!config.font_name.empty()) {
-    fs::path font_path =
-        fs::path(get_base_dir()) / "assets" / (config.font_name + ".ttf");
-
-    if (fs::exists(font_path)) {
-      custom_font = LoadFontEx(font_path.c_str(), config.font_size, nullptr, 0);
-    } else {
-      std::cerr << "Failed to load font from: " << font_path << std::endl;
+    const char *home = std::getenv("HOME");
+    if (!home) {
+      std::cerr << "Failed to get the HOME path" << std::endl;
       config.font_name = "";
+    } else {
+      fs::path font_path = fs::path(home) / ".config" / "spotlightpp" /
+                           "fonts" / (config.font_name + ".ttf");
+
+      if (fs::exists(font_path)) {
+        custom_font =
+            LoadFontEx(font_path.c_str(), config.font_size, nullptr, 0);
+      } else {
+        std::cerr << "Failed to load font from: " << font_path << std::endl;
+        config.font_name = "";
+      }
     }
   }
 
