@@ -103,6 +103,7 @@ Spotlight++ builds upon several excellent open-source projects:
 - [Raylib](https://www.raylib.com/) - The graphical framework enabling our minimalist, fast-rendering UI
 - [cpp-httplib](https://github.com/yhirose/cpp-httplib) - Handles all web-related functionality including URL processing
 - [toml++](https://github.com/marzer/tomlplusplus) - Provides our TOML configuration parsing capabilities
+- [argparse](https://github.com/p-ranav/argparse) - Makes the cli configuration possible
 
 ### Inspiration
 - macOS Spotlight - For the general UX philosophy of a unified, keyboard-driven interface
