@@ -53,6 +53,7 @@ Edit `~/.config/spotlightpp/config.toml` to customize behavior:
 builtins = true
 
 [font]
+name "Lato-Regular" # empty for default raylib font, use .ttf files from the assets folder
 size = 20
 
 [prompt]
