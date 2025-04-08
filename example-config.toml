@@ -1,0 +1,20 @@
+[font]
+name = "JetBrainsMono-Regular"
+
+[prompt]
+position = "bottom"
+precision = 10
+width = 550
+builtins = false
+
+[window]
+position = "center"
+fps = 60
+
+[theme]
+bg1 = 0x1f1d2eff
+bg2 = 0x26233aff
+
+fg1 = 0xe0def4ff
+fg2 = 0x908caaff
+fg3 = 0x6e6a86ff
