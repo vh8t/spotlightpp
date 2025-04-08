@@ -251,7 +251,7 @@ int main() {
     if (frame_counter / (config.target_fps / 2) % 2 == 0 && !buffer.empty())
       DrawText("|",
                PADDING_LEFT + 3 + MeasureText(buffer.c_str(), config.font_size),
-               12, config.font_size, config.fg2);
+               prompt_y, config.font_size, config.fg2);
 
     if (change) {
       if (buffer.empty()) {
