@@ -62,6 +62,7 @@ position = "top"  # top/bottom
 precision = 6     # decimal points
 auto-eval = true  # auto evaluate expressions
 builtins = true
+radius = 0.5      # border radius (0-1)
 
 [window]
 title = "spotlight++"
@@ -69,6 +70,7 @@ fps = 60
 position = "bottom center"  # top left, top, top right, left, center, right, bottom left, bottom, bottom right
 pad-x = 50                  # x axis padding
 pad-y = 50                  # y axis padding
+quit-on = "exit"            # quit on certain phrase + enter
 
 [theme]
 # RGBA

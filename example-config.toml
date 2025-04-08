@@ -6,8 +6,10 @@ position = "bottom"
 precision = 10
 width = 550
 builtins = false
+radius = 0.1
 
 [window]
+quit-on = "quit"
 position = "center"
 fps = 60
 

@@ -57,6 +57,7 @@ Config load_config() {
     config.prompt_precision = data["prompt"]["precision"].value_or(6);
     config.auto_eval = data["prompt"]["auto-eval"].value_or(true);
     config.builtins = data["prompt"]["builtins"].value_or(true);
+    config.radius = data["prompt"]["radius"].value_or(0.5f);
 
     std::string prompt_position = data["prompt"]["position"].value_or("top");
     if (prompt_position == "bottom") {
@@ -69,6 +70,7 @@ Config load_config() {
         std::max(std::min(config.prompt_precision, 15), 0) + 1;
 
     config.window_title = data["window"]["title"].value_or("spotlight++");
+    config.quit_on = data["window"]["quit-on"].value_or("");
     config.target_fps = data["window"]["fps"].value_or(120);
     config.x_padding = data["window"]["pad-x"].value_or(50);
     config.y_padding = data["window"]["pad-y"].value_or(50);

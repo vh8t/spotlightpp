@@ -262,8 +262,10 @@ int main(int argc, const char **argv) {
     }
 
     if (IsKeyPressed(KEY_ENTER) && !buffer.empty()) {
-      if (!std::isnan(result) &&
-          (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))) {
+      if (config.quit_on == buffer) {
+        running = false;
+      } else if (!std::isnan(result) &&
+                 (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))) {
         ans = result;
         change = true;
       } else {
@@ -388,7 +390,7 @@ int main(int argc, const char **argv) {
             static_cast<float>(12 + y_offset + (config.font_size + 10) * i - 4),
             static_cast<float>(config.prompt_width - 12),
             config.font_size + 6.0f};
-        DrawRectangleRounded(rec, 0.5f, 0.0f, config.bg2);
+        DrawRectangleRounded(rec, config.radius, 0.0f, config.bg2);
       }
       DrawTextB(filtered[i + offset].app_name.c_str(), 14,
                 12 + y_offset + (config.font_size + 10) * i, config.font_size,
@@ -416,7 +418,7 @@ int main(int argc, const char **argv) {
           static_cast<float>(MeasureTextB(res.c_str(), config.font_size) + 18),
           config.font_size + 6.0f};
 
-      DrawRectangleRounded(rec, 0.5f, 0.0f, config.bg2);
+      DrawRectangleRounded(rec, config.radius, 0.0f, config.bg2);
       DrawTextB(res.c_str(), x, prompt_y, config.font_size, config.fg2);
     }
 

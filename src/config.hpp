@@ -30,8 +30,10 @@ struct Config {
   int prompt_precision = 6;
   bool builtins = true;
   bool auto_eval = true;
+  float radius = 0.5f;
 
   std::string window_title = "spotlight++";
+  std::string quit_on = "";
   int target_fps = 120;
   int x_padding = 50;
   int y_padding = 50;
