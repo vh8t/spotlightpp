@@ -320,12 +320,12 @@ int main() {
 
       int x = PADDING_LEFT + 20 + MeasureText(buffer.c_str(), config.font_size);
       Rectangle rec = {
-          static_cast<float>(x - 9), 8.0f,
+          static_cast<float>(x - 9), static_cast<float>(prompt_y - 4),
           static_cast<float>(MeasureText(res.c_str(), config.font_size) + 18),
           config.font_size + 6.0f};
 
       DrawRectangleRounded(rec, 0.5f, 0.0f, config.bg2);
-      DrawText(res.c_str(), x, 12, config.font_size, config.fg2);
+      DrawText(res.c_str(), x, prompt_y, config.font_size, config.fg2);
     }
 
     if (change) {
