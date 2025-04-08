@@ -115,9 +115,11 @@ int main(int argc, const char **argv) {
     apps.push_back({"--spotlight++-builtin--", "Quit", "--quit--"});
   }
 
-  SetConfigFlags(FLAG_WINDOW_UNDECORATED | FLAG_BORDERLESS_WINDOWED_MODE);
+  SetConfigFlags(FLAG_WINDOW_UNDECORATED | FLAG_BORDERLESS_WINDOWED_MODE |
+                 FLAG_WINDOW_TRANSPARENT);
   InitWindow(config.prompt_width, config.prompt_height,
              config.window_title.c_str());
+  SetWindowState(FLAG_WINDOW_UNDECORATED);
 
   int width = GetMonitorWidth(0);
   int height = GetMonitorHeight(0);
