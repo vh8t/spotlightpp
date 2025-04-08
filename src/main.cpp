@@ -7,6 +7,7 @@
 #include "utils.hpp"
 
 #include <cstdlib>
+#include <ctime>
 #include <filesystem>
 #include <httplib.h>
 #include <iomanip>
