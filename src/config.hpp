@@ -7,7 +7,7 @@
 
 enum class Position {
   TOP_LEFT,
-  TOP_CENTER,
+  TOP,
   TOP_RIGHT,
 
   LEFT,
@@ -15,7 +15,7 @@ enum class Position {
   RIGHT,
 
   BOTTOM_LEFT,
-  BOTTOM_CENTER,
+  BOTTOM,
   BOTTOM_RIGHT,
 };
 
@@ -26,13 +26,13 @@ struct Config {
   int prompt_height = 40;
   int prompt_width = 700;
   int prompt_max_elements = 7;
-  Position prompt_position = Position::TOP_CENTER;
+  Position prompt_position = Position::CENTER;
   int prompt_precision = 6;
 
   std::string window_title = "spotlight++";
   int target_fps = 120;
   int x_padding = 50;
-  int y_paddding = 50;
+  int y_padding = 50;
   Position position = Position::CENTER;
 
   Color bg1 = BG_GRAY;

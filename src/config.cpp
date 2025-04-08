@@ -1,5 +1,4 @@
 #include "config.hpp"
-#include "utils.hpp"
 
 #include <filesystem>
 #include <iostream>
@@ -12,8 +11,8 @@ namespace fs = std::filesystem;
 Position str_to_pos(const std::string &str) {
   if (str == "top left") {
     return Position::TOP_LEFT;
-  } else if (str == "top center") {
-    return Position::TOP_CENTER;
+  } else if (str == "top") {
+    return Position::TOP;
   } else if (str == "top right") {
     return Position::TOP_RIGHT;
   } else if (str == "left") {
@@ -24,8 +23,8 @@ Position str_to_pos(const std::string &str) {
     return Position::RIGHT;
   } else if (str == "bottom left") {
     return Position::BOTTOM_LEFT;
-  } else if (str == "bottom center") {
-    return Position::BOTTOM_CENTER;
+  } else if (str == "bottom") {
+    return Position::BOTTOM;
   } else if (str == "bottom right") {
     return Position::BOTTOM_RIGHT;
   }
@@ -59,9 +58,9 @@ Config load_config() {
 
     std::string prompt_position = data["prompt"]["position"].value_or("top");
     if (prompt_position == "bottom") {
-      config.prompt_position = Position::BOTTOM_CENTER;
+      config.prompt_position = Position::BOTTOM;
     } else {
-      config.prompt_position = Position::TOP_CENTER;
+      config.prompt_position = Position::TOP;
     }
 
     config.prompt_precision =
@@ -70,7 +69,7 @@ Config load_config() {
     config.window_title = data["window"]["title"].value_or("spotlight++");
     config.target_fps = data["window"]["fps"].value_or(120);
     config.x_padding = data["window"]["pad-x"].value_or(50);
-    config.y_paddding = data["window"]["pad-y"].value_or(50);
+    config.y_padding = data["window"]["pad-y"].value_or(50);
 
     std::string position = data["window"]["position"].value_or("center");
     config.position = str_to_pos(position);

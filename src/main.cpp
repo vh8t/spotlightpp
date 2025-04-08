@@ -1,11 +1,12 @@
-#include <cstdlib>
 #define TE_POW_FROM_RIGHT
 
 #include "apps.hpp"
+#include "cli.hpp"
 #include "config.hpp"
 #include "tinyexpr.h"
 #include "utils.hpp"
 
+#include <cstdlib>
 #include <filesystem>
 #include <httplib.h>
 #include <iomanip>
@@ -100,8 +101,12 @@ bool rate_limit_backspace(bool reset = false) {
   return false;
 }
 
-int main() {
+int main(int argc, const char **argv) {
   config = load_config();
+
+  if (!parse_and_load(argc, argv, &config)) {
+    return 0;
+  }
 
   std::vector<std::string> app_files = get_app_files();
   std::vector<App> apps, filtered;
@@ -130,15 +135,15 @@ int main() {
   switch (config.position) {
   case Position::TOP_LEFT: {
     posX = config.x_padding;
-    posY = config.y_paddding;
+    posY = config.y_padding;
   } break;
-  case Position::TOP_CENTER: {
+  case Position::TOP: {
     posX = (width - config.prompt_width) / 2;
-    posY = config.y_paddding;
+    posY = config.y_padding;
   } break;
   case Position::TOP_RIGHT: {
     posX = width - config.prompt_width - config.x_padding;
-    posY = config.y_paddding;
+    posY = config.y_padding;
   } break;
   case Position::LEFT: {
     posX = config.x_padding;
@@ -154,15 +159,15 @@ int main() {
   } break;
   case Position::BOTTOM_LEFT: {
     posX = config.x_padding;
-    posY = height - config.prompt_height - config.y_paddding;
+    posY = height - config.prompt_height - config.y_padding;
   } break;
-  case Position::BOTTOM_CENTER: {
+  case Position::BOTTOM: {
     posX = (width - config.prompt_width) / 2;
-    posY = height - config.prompt_height - config.y_paddding;
+    posY = height - config.prompt_height - config.y_padding;
   } break;
   case Position::BOTTOM_RIGHT: {
     posX = width - config.prompt_width - config.x_padding;
-    posY = height - config.prompt_height - config.y_paddding;
+    posY = height - config.prompt_height - config.y_padding;
   } break;
   }
 
@@ -276,7 +281,7 @@ int main() {
     ClearBackground(config.bg1);
 
     int prompt_y = 12;
-    if (config.prompt_position == Position::BOTTOM_CENTER) {
+    if (config.prompt_position == Position::BOTTOM) {
       prompt_y = 10 + elements * (config.font_size + 10);
       if (filtered.size() > 0)
         prompt_y += 10;
@@ -317,7 +322,7 @@ int main() {
         SetWindowSize(config.prompt_width, config.prompt_height);
       }
 
-      if (config.prompt_position == Position::BOTTOM_CENTER) {
+      if (config.prompt_position == Position::BOTTOM) {
         SetWindowPosition(posX, posY - height + config.prompt_height);
       }
 
@@ -327,7 +332,7 @@ int main() {
 
     for (int i = 0; i < elements; i++) {
       int y_offset = 40;
-      if (config.prompt_position == Position::BOTTOM_CENTER) {
+      if (config.prompt_position == Position::BOTTOM) {
         y_offset = 0;
       }
 
