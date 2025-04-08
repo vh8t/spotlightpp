@@ -1,4 +1,5 @@
 #define TE_POW_FROM_RIGHT
+#define PADDING_LEFT 14
 
 #include "apps.hpp"
 #include "cli.hpp"
@@ -14,8 +15,6 @@
 #include <raylib.h>
 #include <sstream>
 #include <sys/wait.h>
-
-#define PADDING_LEFT 14
 
 namespace fs = std::filesystem;
 
@@ -142,15 +141,15 @@ int main(int argc, const char **argv) {
   } break;
   case Position::LEFT: {
     posX = config.x_padding;
-    posY = height / 2.5;
+    posY = (height - config.prompt_height) / 2;
   } break;
   case Position::CENTER: {
     posX = (width - config.prompt_width) / 2;
-    posY = height / 2.5;
+    posY = (height - config.prompt_height) / 2;
   } break;
   case Position::RIGHT: {
     posX = width - config.prompt_width - config.x_padding;
-    posY = height / 2.5;
+    posY = (height - config.prompt_height) / 2;
   } break;
   case Position::BOTTOM_LEFT: {
     posX = config.x_padding;
@@ -323,18 +322,22 @@ int main(int argc, const char **argv) {
         prompt_y += 10;
     }
 
+    int buf_width =
+        MeasureTextB(buffer.substr(0, index).c_str(), config.font_size);
+    int buf_x = PADDING_LEFT;
+
     if (buffer.empty()) {
       DrawTextB("Type to search...", PADDING_LEFT, prompt_y, config.font_size,
                 config.fg3);
     } else {
-      DrawTextB(buffer.c_str(), PADDING_LEFT, prompt_y, config.font_size,
-                config.fg1);
+      if (config.prompt_width - PADDING_LEFT * 2 < buf_width) {
+        buf_x = config.prompt_width - PADDING_LEFT - buf_width;
+      }
+      DrawTextB(buffer.c_str(), buf_x, prompt_y, config.font_size, config.fg1);
     }
 
     if (frame_counter / (config.target_fps / 2) % 2 == 0) {
-      int carret_x =
-          PADDING_LEFT + 1 +
-          MeasureTextB(buffer.substr(0, index).c_str(), config.font_size);
+      int carret_x = buf_x + buf_width + 1;
 
       DrawLineEx(
           {static_cast<float>(carret_x), static_cast<float>(prompt_y + 2)},
