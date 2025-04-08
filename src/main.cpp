@@ -187,7 +187,6 @@ int main(int argc, const char **argv) {
     }
   }
 
-  std::string buffer;
   double result = NAN;
   double ans = 0.0f;
   bool change = false;
@@ -195,6 +194,8 @@ int main(int argc, const char **argv) {
   int elements = 0;
   int selected = 0;
   int offset = 0;
+
+  std::string buffer;
 
   size_t index = 0;
 
@@ -329,12 +330,7 @@ int main(int argc, const char **argv) {
                 config.fg1);
     }
 
-    if (frame_counter / (config.target_fps / 2) % 2 == 0 && !buffer.empty()) {
-      // DrawTextB("|",
-      //           PADDING_LEFT + MeasureTextB(buffer.substr(0, index).c_str(),
-      //                                       config.font_size),
-      //           prompt_y, config.font_size, config.fg2);
-
+    if (frame_counter / (config.target_fps / 2) % 2 == 0) {
       int carret_x =
           PADDING_LEFT + 1 +
           MeasureTextB(buffer.substr(0, index).c_str(), config.font_size);
@@ -395,7 +391,7 @@ int main(int argc, const char **argv) {
                 config.fg2);
     }
 
-    if (!std::isnan(result)) {
+    if (!std::isnan(result) && (config.auto_eval || !show_eq)) {
       std::ostringstream oss;
       oss << std::setprecision(config.prompt_precision) << result;
       std::string res = oss.str();

@@ -28,6 +28,8 @@ struct Config {
   int prompt_max_elements = 7;
   Position prompt_position = Position::CENTER;
   int prompt_precision = 6;
+  bool builtins = true;
+  bool auto_eval = true;
 
   std::string window_title = "spotlight++";
   int target_fps = 120;
@@ -41,8 +43,6 @@ struct Config {
   Color fg1 = WHITE;
   Color fg2 = LIGHTGRAY;
   Color fg3 = DARKGRAY;
-
-  bool builtins = true;
 };
 
 Config load_config();

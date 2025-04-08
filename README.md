@@ -50,8 +50,6 @@ sudo make install  # Optional, installs system-wide
 Edit `~/.config/spotlightpp/config.toml` to customize behavior:
 
 ```toml
-builtins = true
-
 [font]                # font must be in ~/.config/spotlightpp/fonts
 name = "Lato-Regular" # empty for default raylib font, use file name from fonts folder without .ttf
 size = 20
@@ -62,6 +60,8 @@ width = 700
 max-elements = 7  # search results
 position = "top"  # top/bottom
 precision = 6     # decimal points
+auto-eval = true  # auto evaluate expressions
+builtins = true
 
 [window]
 title = "spotlight++"

@@ -55,6 +55,8 @@ Config load_config() {
     config.prompt_width = data["prompt"]["width"].value_or(700);
     config.prompt_max_elements = data["prompt"]["max-elements"].value_or(7);
     config.prompt_precision = data["prompt"]["precision"].value_or(6);
+    config.auto_eval = data["prompt"]["auto-eval"].value_or(true);
+    config.builtins = data["prompt"]["builtins"].value_or(true);
 
     std::string prompt_position = data["prompt"]["position"].value_or("top");
     if (prompt_position == "bottom") {
@@ -80,8 +82,6 @@ Config load_config() {
     config.fg1 = GetColor(data["theme"]["fg1"].value_or(ColorToInt(WHITE)));
     config.fg2 = GetColor(data["theme"]["fg2"].value_or(ColorToInt(LIGHTGRAY)));
     config.fg3 = GetColor(data["theme"]["fg3"].value_or(ColorToInt(DARKGRAY)));
-
-    config.builtins = data["builtins"].value_or(true);
 
     return config;
   } catch (const toml::parse_error &err) {
