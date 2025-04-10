@@ -206,6 +206,8 @@ int main(int argc, const char **argv) {
   int left_counter = 0;
 
   te_variable vars[] = {{"ans", &ans}};
+  Rectangle prompt = {0, 0, static_cast<float>(config.prompt_width),
+                      static_cast<float>(config.prompt_height)};
 
   while (!WindowShouldClose() && running) {
     int key = GetCharPressed();
@@ -317,7 +319,8 @@ int main(int argc, const char **argv) {
 
     BeginDrawing();
 
-    ClearBackground(config.bg1);
+    ClearBackground(BLANK);
+    // ClearBackground(config.bg1);
 
     int prompt_y = 12;
     if (config.prompt_position == Position::BOTTOM) {
@@ -325,6 +328,10 @@ int main(int argc, const char **argv) {
       if (filtered.size() > 0)
         prompt_y += 10;
     }
+
+    DrawRectangleRounded(prompt,
+                         config.radius / (prompt.height / config.prompt_height),
+                         0.0f, config.bg1);
 
     int buf_width =
         MeasureTextB(buffer.substr(0, index).c_str(), config.font_size);
@@ -367,8 +374,10 @@ int main(int argc, const char **argv) {
       int height = config.prompt_height;
       if (elements > 0) {
         height = config.prompt_height + 10 + elements * (config.font_size + 10);
+        prompt.height = height;
         SetWindowSize(config.prompt_width, height);
       } else {
+        prompt.height = config.prompt_height;
         SetWindowSize(config.prompt_width, config.prompt_height);
       }
 
@@ -393,10 +402,15 @@ int main(int argc, const char **argv) {
             static_cast<float>(config.prompt_width - 12),
             config.font_size + 6.0f};
         DrawRectangleRounded(rec, config.radius, 0.0f, config.bg2);
+
+        DrawTextB(filtered[i + offset].app_name.c_str(), 14,
+                  12 + y_offset + (config.font_size + 10) * i, config.font_size,
+                  config.fg1);
+      } else {
+        DrawTextB(filtered[i + offset].app_name.c_str(), 14,
+                  12 + y_offset + (config.font_size + 10) * i, config.font_size,
+                  config.fg3);
       }
-      DrawTextB(filtered[i + offset].app_name.c_str(), 14,
-                12 + y_offset + (config.font_size + 10) * i, config.font_size,
-                config.fg2);
     }
 
     if (!std::isnan(result) && (config.auto_eval || !show_eq)) {

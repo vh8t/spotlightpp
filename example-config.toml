@@ -11,13 +11,13 @@ radius = 0.1
 [window]
 quit-on = "quit"
 position = "center"
-fps = 60
+fps = 120
 
 [theme]
-# bg1 = 0x1f1d2eff
-bg1 = 0x00000000
-# bg2 = 0x26233aff
-bg2 = 0x26233a22
+bg1 = 0x1f1d2ebb
+# bg1 = 0x00000000
+bg2 = 0x26233aaa
+# bg2 = 0x26233a22
 
 fg1 = 0xe0def4ff
 fg2 = 0x908caaff
