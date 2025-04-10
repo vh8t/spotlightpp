@@ -10,14 +10,13 @@ radius = 0.1
 
 [window]
 quit-on = "quit"
-position = "center"
+position = "bottom"
+pad-y = 120
 fps = 120
 
 [theme]
-bg1 = 0x1f1d2ebb
-# bg1 = 0x00000000
+bg1 = 0x1f1d2ecc
 bg2 = 0x26233aaa
-# bg2 = 0x26233a22
 
 fg1 = 0xe0def4ff
 fg2 = 0x908caaff
