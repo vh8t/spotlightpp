@@ -15,6 +15,7 @@
 #include <raylib.h>
 #include <sstream>
 #include <sys/wait.h>
+#include <unordered_set>
 
 namespace fs = std::filesystem;
 
@@ -104,8 +105,17 @@ int main(int argc, const char **argv) {
 
   std::vector<std::string> app_files = get_app_files();
   std::vector<App> apps, filtered;
+  std::unordered_set<std::string> seen_apps;
 
   for (const auto &app_file : app_files) {
+    App app = get_app(app_file);
+
+    std::string name_key = app.app_name;
+    if (name_key.empty() || app.app_path.empty() || seen_apps.count(name_key)) {
+      continue;
+    }
+
+    seen_apps.insert(name_key);
     apps.push_back(get_app(app_file));
   }
 

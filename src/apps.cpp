@@ -75,13 +75,13 @@ App get_app(const std::string &path) {
     std::string value = orig.substr(delimiter + 1);
 
     if (key == "Name") {
-      app.app_name = value;
+      app.app_name = strip(value);
     } else if (key == "Exec") {
       size_t d = value.find(' ');
       if (d != std::string::npos)
         value = value.substr(0, d);
 
-      app.app_path = value;
+      app.app_path = strip(value);
     }
   }
 
