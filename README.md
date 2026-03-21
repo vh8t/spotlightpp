@@ -33,17 +33,22 @@ Spotlight++ is a modern, keyboard-driven application launcher for Linux systems,
 
 ## Installation
 ### Dependencies
+Ensure you have a C++23 compatible compiler (GCC 13+ or Clang 16+) and the following libraries installed:
 - Raylib (for graphics)
-- cpp-httplib (for url validation)
-- tomlplusplus (for configuration)
-- g++ (with C++17 support)
+- cpp-httplib (networking/for url validation)
+- toml++ (configuration parsing)
+- Fontconfig (system font discovery)
 
 ### Build Instructions
 ```sh
 git clone https://github.com/vh8t/spotlightpp.git
 cd spotlightpp
-make
-sudo make install  # Optional, installs system-wide
+
+cmake -B build -DMAKE_BUILD_TYPE=Release
+cmake --build build
+
+# Install (optional, installs to /usr/local/bin by default)
+sudo cmake --install build
 ```
 
 ## Configuration
@@ -80,10 +85,6 @@ fg1 = 0xffffffff  # primary text
 fg2 = 0xc8c8c8ff  # secondary text
 fg3 = 0x505050ff  # hint text
 ```
-
-## Known Issues
-- **CPU Usage**: Due to Raylib's rendering approach, the launcher may use more CPU than traditional launchers. This shouldn't impact performance as it's designed for short-lived sessions.
-- **Slow Machines**: Users with older hardware may experience slight input lag.
 
 ## Usage Tips
 1. Just start typing to search apps or evaluate expressions
