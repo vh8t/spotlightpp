@@ -33,11 +33,12 @@ static Position position_from_str(const std::string &str) {
 }
 
 struct FontConfig {
-  unsigned int size = 20;
   std::string name = "";
+  unsigned int size = 20;
 };
 
 struct PromptConfig {
+  std::string terminal = "xterm";
   unsigned int height = 40;
   unsigned int width = 700;
   unsigned int max_elements = 7;
@@ -60,7 +61,6 @@ struct WindowConfig {
 struct ThemeConfig {
   Color bg1 = BG_DARK_GRAY;
   Color bg2 = BG_LIGHT_GRAY;
-
   Color fg1 = FG_WHITE;
   Color fg2 = FG_LIGHT_GRAY;
   Color fg3 = FG_DARK_GRAY;

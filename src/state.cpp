@@ -25,8 +25,8 @@ State::State(int argc, const char **argv) {
   for (const auto &app_file : app_files) {
     App app = App::get_app(app_file);
 
-    std::string name_key = app.app_name;
-    if (name_key.empty() || app.app_path.empty() || seen_apps.count(name_key))
+    std::string name_key = app.name;
+    if (name_key.empty() || app.path.empty() || seen_apps.count(name_key))
       continue;
 
     seen_apps.insert(name_key);
@@ -192,7 +192,7 @@ void State::handle_events(void) {
       change = true;
     } else {
       App app = filtered[offset + selected];
-      app.open({});
+      app.open(config, {});
       running = false;
     }
   }
@@ -299,10 +299,10 @@ void State::draw_frame(void) {
       };
 
       DrawRectangleRounded(rect, config.prompt.radius, 0.f, config.theme.bg2);
-      draw_text(filtered[i + offset].app_name.c_str(), 14,
+      draw_text(filtered[i + offset].name.c_str(), 14,
                 12 + y_offset + (config.font.size + 10) * i, config.theme.fg1);
     } else
-      draw_text(filtered[i + offset].app_name.c_str(), 14,
+      draw_text(filtered[i + offset].name.c_str(), 14,
                 12 + y_offset + (config.font.size + 10) * i, config.theme.fg3);
   }
 

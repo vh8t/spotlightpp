@@ -62,12 +62,13 @@ size = 20
 [prompt]
 height = 40
 width = 700
-max-elements = 7  # search results
-position = "top"  # top/bottom
-precision = 6     # decimal points
-auto-eval = true  # auto evaluate expressions
+max-elements = 7    # search results
+position = "top"    # top/bottom
+precision = 6       # decimal points
+auto-eval = true    # auto evaluate expressions
 builtins = true
-radius = 0.5      # border radius (0-1)
+radius = 0.5        # border radius (0-1)
+terminal = "xterm"  # default terminal to open terminal applications in
 
 [window]
 title = "spotlight++"

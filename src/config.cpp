@@ -31,12 +31,13 @@ Config Config::load(void) {
   Config config{
       .font =
           {
-              .size = data["font"]["size"].value_or(20u),
               .name = data["font"]["name"].value_or(""),
+              .size = data["font"]["size"].value_or(20u),
           },
 
       .prompt =
           {
+              .terminal = data["prompt"]["terminal"].value_or(""),
               .height = data["prompt"]["height"].value_or(40u),
               .width = data["prompt"]["width"].value_or(700u),
               .max_elements = data["prompt"]["max-elements"].value_or(7u),

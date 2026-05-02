@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <exception>
+#include <fcntl.h>
 #include <filesystem>
 #include <fstream>
 #include <iterator>
@@ -16,6 +17,7 @@
 #include <vector>
 
 #include "apps.hpp"
+#include "config.hpp"
 #include "utils.hpp"
 
 namespace fs = std::filesystem;
@@ -57,15 +59,14 @@ std::vector<App> App::filter(const std::vector<App> &apps,
   std::vector<App> result;
   std::string new_name = trunc(name);
 
-  std::copy_if(apps.begin(), apps.end(), std::back_inserter(result),
-               [&new_name](const App &app) {
-                 auto it = std::search(
-                     app.app_name.begin(), app.app_name.end(), new_name.begin(),
-                     new_name.end(), [](char a, char b) {
-                       return std::tolower(a) == std::tolower(b);
-                     });
-                 return it != app.app_name.end();
-               });
+  std::copy_if(
+      apps.begin(), apps.end(), std::back_inserter(result),
+      [&new_name](const App &app) {
+        auto it = std::search(
+            app.name.begin(), app.name.end(), new_name.begin(), new_name.end(),
+            [](char a, char b) { return std::tolower(a) == std::tolower(b); });
+        return it != app.name.end();
+      });
 
   return result;
 }
@@ -101,38 +102,69 @@ App App::get_app(const std::string &path) {
     std::string key = original.substr(0, delimiter);
     std::string value = original.substr(delimiter + 1);
 
-    if (key == "Name")
-      app.app_name = strip(value);
-    else if (key == "Exec") {
+    if (key == "Name") {
+      app.name = strip(value);
+    } else if (key == "Exec") {
       size_t d = value.find(' ');
       if (d != std::string::npos)
         value = value.substr(0, d);
-      app.app_path = strip(value);
+      app.path = strip(value);
+    } else if (key == "Terminal") {
+      app.terminal = value == "true";
     }
   }
 
   return app;
 }
 
-void App::open(const std::vector<std::string> &args) {
+void App::open(const Config &config, const std::vector<std::string> &args) {
   pid_t pid = fork();
-  if (pid == -1) {
+  if (pid < 0) {
     std::println(stderr, "Failed to fork process: {}", strerror(errno));
     return;
   }
 
   if (pid == 0) {
-    std::vector<const char *> c_args = {app_path.c_str()};
-    for (const auto &arg : args)
-      c_args.push_back(arg.c_str());
+    setsid();
+    pid_t grandchild = fork();
+    if (grandchild < 0)
+      _exit(1);
+    if (grandchild > 0)
+      _exit(0);
+
+    int dev_null = ::open("/dev/null", O_RDWR);
+    if (dev_null != -1) {
+      dup2(dev_null, STDIN_FILENO);
+      dup2(dev_null, STDOUT_FILENO);
+      dup2(dev_null, STDERR_FILENO);
+      if (dev_null > 2)
+        ::close(dev_null);
+    }
+
+    std::vector<const char *> c_args = {};
+    std::string full_cmd = path;
+
+    if (terminal) {
+      c_args.push_back(config.prompt.terminal.c_str());
+      c_args.push_back("-e");
+
+      for (const auto &arg : args)
+        full_cmd += " " + arg;
+
+      c_args.push_back(full_cmd.c_str());
+    } else {
+      c_args.push_back(path.c_str());
+      for (const auto &arg : args)
+        c_args.push_back(arg.c_str());
+    }
+
     c_args.push_back(nullptr);
 
     execvp(c_args[0], const_cast<char *const *>(c_args.data()));
 
-    std::println(stderr, "Failed to execute {}: {}", app_path, strerror(errno));
-    std::exit(1);
-  } else {
-    int status;
-    waitpid(pid, &status, WNOHANG);
+    std::println(stderr, "Failed to execute {}: {}", path, strerror(errno));
+    _exit(1);
   }
+
+  waitpid(pid, nullptr, 0);
 }
