@@ -47,7 +47,7 @@ cd spotlightpp
 cmake -B build -DMAKE_BUILD_TYPE=Release
 cmake --build build
 
-# Install (optional, installs to /usr/local/bin by default)
+# Install (optional, installs to /usr/bin by default)
 sudo cmake --install build
 ```
 
