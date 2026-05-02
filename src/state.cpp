@@ -190,7 +190,7 @@ void State::handle_events(void) {
              (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))) {
       ans = result;
       change = true;
-    } else {
+    } else if (offset + selected < filtered.size()) {
       App app = filtered[offset + selected];
       app.open(config, {});
       running = false;

@@ -13,7 +13,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 find_package(raylib REQUIRED)
-find_package(httplib REQUIRED)
 find_package(tomlplusplus REQUIRED)
 find_package(Fontconfig REQUIRED)
 
@@ -37,7 +36,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} PRIVATE 
   m 
   raylib 
-  httplib::httplib
   tomlplusplus::tomlplusplus
   Fontconfig::Fontconfig
 )

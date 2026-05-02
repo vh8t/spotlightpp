@@ -5,7 +5,6 @@ Spotlight++ is a modern, keyboard-driven application launcher for Linux systems,
 
 - Fast application searching from `/usr/share/applications` and `~/.local/share/applications`
 - Built-in calculator with expression evaluation
-- Quick web search/open functionality
 - Minimalist UI with keyboard-only navigation
 - TOML-based configuration
 
@@ -20,10 +19,6 @@ Spotlight++ is a modern, keyboard-driven application launcher for Linux systems,
 - Supports variables (use `ans` to reference last result)
 - Basic arithmetic, trigonometric functions, and more
 
-### Web Integration
-- Direct URL opening in default browser
-- Quick Google search fallback for non-URL queries
-
 ### Keyboard Navigation
 - **Tab**/**↓** - Move selection down
 - **Shift+Tab**/**↑** - Move selection up
@@ -35,7 +30,6 @@ Spotlight++ is a modern, keyboard-driven application launcher for Linux systems,
 ### Dependencies
 Ensure you have a C++23 compatible compiler (GCC 13+ or Clang 16+) and the following libraries installed:
 - Raylib (for graphics)
-- cpp-httplib (networking/for url validation)
 - toml++ (configuration parsing)
 - Fontconfig (system font discovery)
 
@@ -89,7 +83,6 @@ fg3 = 0x505050ff  # hint text
 
 ## Usage Tips
 1. Just start typing to search apps or evaluate expressions
-2. Prefix with `>` to force web search (e.g., `>linux news`)
 3. Use `ans` in calculations to reference previous result
 4. Common math functions are supported (`sin`, `cos`, `sqrt`, etc.)
 
@@ -105,7 +98,6 @@ Spotlight++ builds upon several excellent open-source projects:
 
 ### Core Libraries
 - [Raylib](https://www.raylib.com/) - The graphical framework enabling our minimalist, fast-rendering UI
-- [cpp-httplib](https://github.com/yhirose/cpp-httplib) - Handles all web-related functionality including URL processing
 - [toml++](https://github.com/marzer/tomlplusplus) - Provides our TOML configuration parsing capabilities
 - [argparse](https://github.com/p-ranav/argparse) - Makes the cli configuration possible
 
