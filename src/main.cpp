@@ -17,7 +17,8 @@ int main(int argc, const char **argv) {
   const ns frame_duration{1'000'000'000 / target_fps};
   auto next_frame = clock::now();
 
-  while (!WindowShouldClose() && state.running) {
+  while (state.running) {
+    state.running = !WindowShouldClose() && IsWindowFocused();
     auto frame_start = clock::now();
 
     state.handle_events();
